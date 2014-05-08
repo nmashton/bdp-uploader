@@ -2,7 +2,6 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
 from csv_utils import validate_csv, get_fields
-import csv
 import json
 import zipfile
 
