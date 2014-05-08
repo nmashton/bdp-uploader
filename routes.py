@@ -80,7 +80,7 @@ def handle_csv(filename, type, deep):
 def index():
     return render_template("index.html")
 
-@app.route("/csv", methods=["POST"])
+@app.route("/csv", methods=["GET", "POST"])
 def upload_csv():
     """
     Saves an uploaded CSV to disk and serves up its metadata editor.
@@ -88,17 +88,19 @@ def upload_csv():
     POST request includes both the uploaded file and a few form
     parameters (deep, type).
     """
-    file = request.files["csv"]
+    if request.method == "POST":
+        file = request.files["csv"]
 
-    if request.form.get("deep") == "deep":
-        deep = True
-    else:
-        deep = False
+        if request.form.get("deep") == "deep":
+            deep = True
+        else:
+            deep = False
 
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config["UPLOADS"], filename))
-        return handle_csv(filename=filename, type=request.form["type"], deep=deep)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config["UPLOADS"], filename))
+            return handle_csv(filename=filename, type=request.form["type"], deep=deep)
+    return redirect("/")
 
 @app.route("/metadata", methods=["POST"])
 def create_metadata():
