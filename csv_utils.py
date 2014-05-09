@@ -6,8 +6,12 @@ import re
 import json
 import base64
 import unicodecsv as csv
+import os.path
 
-CURRENCIES = "./currencies.csv"
+
+# Create a path to the csv data file with all the currencies
+# The file is placed in the 'data' directory
+CURRENCIES = os.path.join(os.path.dirname(__file__), 'data', 'currencies.csv')
 
 currencies = [r for r in csv.reader(open(CURRENCIES,"r"))][1:]
 
