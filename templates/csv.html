@@ -1,37 +1,62 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<title>Edit metadata</title>
+{% block title %}Edit metadata{% endblock %}
 
-<h1>Edit metadata</h1>
-
-<form action="../metadata" method="post">
-    <input type="hidden" name="granularity" value="{{granularity}}">
-    <input type="hidden" name="type" value="{{type}}">
-    <input type="hidden" name="filename" value="{{filename}}">
-
-    <h2>Resource metadata for {{filename}}</h2>
-    <p>
-        Dataset name: <input type="text" name="name_resource" value="{{name}}"><br>
-        Currency: <select name="currency">
-        {% for (code, name) in currencies %}
-            <option value="{{ code }}">{{ name }}</option>
-        {% endfor %}
-        </select><br>
-        Date last updated: <input type="date" name="dateLastUpdated"><br>
-        Date published: <input type="date" name="datePublished"><br>
-        Fiscal year: <input type="text" name="fiscalYear"><br>
-        Status: <select name="status">
-            <option value="proposed">proposed</option>
-            <option value="approved">approved</option>
-            <option value="adjusted">adjusted</option>
-            <option value="executed">executed</option>
-        </select><br>
-    </p>
-
-    <h2>Data package metadata</h2>
-    <p>
-        Data package name: <input type="text" name="name_package"><br>
-    </p>
-
-    <input type="submit" value="Submit">
-</form>
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>Edit metadata</h1>
+    
+    <form action="../metadata" method="post" role="form">
+      <input type="hidden" name="granularity" value="{{granularity}}">
+      <input type="hidden" name="type" value="{{type}}">
+      <input type="hidden" name="filename" value="{{filename}}">
+      
+      <h2>Resource metadata for {{filename}}</h2>
+      
+      <div class="form-group">
+        <label for="name_resource">Dataset name</label>
+        <input type="text" name="name_resource" value="{{name}}">
+      </div>
+      <div class="form-group">
+        <label for="currency">Currency</label>
+        <select class="form-control" name="currency">
+          {% for (code, name) in currencies %}
+          <option value="{{ code }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="dateLastUpdated">Date last updated</label>
+        <input type="date" name="dateLastUpdated">
+      </div>
+      <div class="form-group">
+        <label for="datePublished">Date published</label>
+        <input type="date" name="datePublished">
+      </div>
+      <div class="form-group">
+        <label for="fiscalYear">Fiscal year</label>
+        <input type="text" name="fiscalYear">
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select class="form-control" name="status">
+          <option value="proposed">proposed</option>
+          <option value="approved">approved</option>
+          <option value="adjusted">adjusted</option>
+          <option value="executed">executed</option>
+        </select>
+      </div>
+      
+      <h2>Data package metadata</h2>
+      
+      <div class="form-group">
+        <label for="name_package">Data package name</label>
+        <input type="text" name="name_package">
+      </div>
+      
+      <input type="submit" class="btn btn-default" value="Submit">
+    </form>
+  </div>
+</div>
+{% endblock %}

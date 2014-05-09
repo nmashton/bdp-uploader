@@ -1,9 +1,15 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<h1>Invalid data</h1>
+{% block title %}Invalid data{% endblock%}
 
-<p>Your data is invalid.</p>
-
-<p>The following errors were returned:</p>
-
-<p>{{ errors }}</p>
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>Invalid data</h1>
+    
+    <p class="text-danger"><strong>Your data is invalid.</strong></p>
+    <p>The following errors were returned:</p>
+    <p class="bg-danger">{{ errors }}</p>
+  </div>
+</div>
+{% endblock %}

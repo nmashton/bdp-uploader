@@ -1,5 +1,11 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<title>Get your package</title>
+{% block title %}Get your package{% endblock %}
 
-<a href="./bdp/{{name}}">Download the package</a>
+{% block content %}
+
+<h1>Get your package</h1>
+
+<a href="/bdp/{{name}}">Download the package</a>
+
+{% endblock %}

@@ -1,17 +1,49 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<title>Upload a CSV</title>
+{% block title %}Upload a CSV{% endblock %}
 
+{% block content %}
 <h1>Upload a CSV</h1>
 
-<form action="./csv" method="post" enctype="multipart/form-data">
-  <p>
-    <input type="file" name="csv"><br>
-    <input type="submit" value="Upload"><br>
-    <input type="radio" name="type" value="aggregated-expenditure" checked="checked">Aggregated expenditure</input><br>
-    <input type="radio" name="type" value="transactional-expenditure">Transactional expenditure</input><br>
-    <input type="radio" name="type" value="aggregated-revenue">Aggregated revenue</input><br>
-    <input type="radio" name="type" value="transactional-revenue">Transactional revenue</input><br>
-    <input type="checkbox" name="deep" value="deep">Deep validation
-  </p>
+<form action="/csv" method="post" enctype="multipart/form-data" role="form">
+  <div class="form-group">
+    <input type="file" name="csv">
+  </div>
+
+  <div class="form-group">
+    <div class="radio">
+      <label>
+        <input type="radio" name="type" value="aggregated-expenditure" checked="checked">
+        Aggregated expenditure
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="type" value="transactional-expenditure">
+        Transactional expenditure
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="type" value="aggregated-revenue">
+        Aggregated revenue
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="type" value="transactional-revenue">
+        Transactional revenue
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="checkbox">
+      <input type="checkbox" name="deep" value="deep">
+      Validate all rows, not only headers (takes a bit longer to run)
+    </div>
+  </div>
+  
+  <button type="submit" class="btn btn-default">Upload</button
 </form>
+{% endblock %}
