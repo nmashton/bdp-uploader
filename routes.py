@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
-from csv_utils import validate_csv, get_fields
+from csv_utils import validate_csv, get_fields, currencies
 import json
 import zipfile
 
@@ -70,10 +70,11 @@ def handle_csv(filename, type, deep):
     type_split = type.rsplit("-",1)
 
     return render_template("csv.html",
-        filename=filename,
-        name=name,
-        granularity=type_split[0],
-        type=type_split[1])
+                           filename=filename,
+                           name=name,
+                           granularity=type_split[0],
+                           type=type_split[1],
+                           currencies=currencies)
 
 ## Routes.
 @app.route("/")

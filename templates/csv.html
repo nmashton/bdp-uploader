@@ -13,8 +13,8 @@
     <p>
         Dataset name: <input type="text" name="name_resource" value="{{name}}"><br>
         Currency: <select name="currency">
-        {% for cur in currencies %}
-            <option value="{{cur[0]}}">{{cur[1]}}</option>
+        {% for (code, name) in currencies %}
+            <option value="{{ code }}">{{ name }}</option>
         {% endfor %}
         </select><br>
         Date last updated: <input type="date" name="dateLastUpdated"><br>

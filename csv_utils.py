@@ -11,9 +11,13 @@ import os.path
 
 # Create a path to the csv data file with all the currencies
 # The file is placed in the 'data' directory
-CURRENCIES = os.path.join(os.path.dirname(__file__), 'data', 'currencies.csv')
+currency_data_file = os.path.join(os.path.dirname(__file__),
+                                  'data', 'currencies.csv')
 
-currencies = [r for r in csv.reader(open(CURRENCIES,"r"))][1:]
+# Extract a list of currencies from the currency data file into tuples
+# Skip the first tuple since that's the header row
+currencies = [(code, name) for (code,name) in 
+              csv.reader(open(currency_data_file, 'r'))][1:]
 
 def get_type(fieldname):
     """
