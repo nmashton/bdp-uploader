@@ -12,7 +12,11 @@
     <h2>Resource metadata for {{filename}}</h2>
     <p>
         Dataset name: <input type="text" name="name_resource" value="{{name}}"><br>
-        Currency: <input type="text" name="currency"><br>
+        Currency: <select name="currency">
+        {% for cur in currencies %}
+            <option value="{{cur[0]}}">{{cur[1]}}</option>
+        {% endfor %}
+        </select><br>
         Date last updated: <input type="date" name="dateLastUpdated"><br>
         Date published: <input type="date" name="datePublished"><br>
         Fiscal year: <input type="text" name="fiscalYear"><br>

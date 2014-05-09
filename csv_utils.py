@@ -5,7 +5,11 @@ import datetime, time
 import re
 import json
 import base64
-import csv
+import unicodecsv as csv
+
+CURRENCIES = "./currencies.csv"
+
+currencies = [r for r in csv.reader(open(CURRENCIES,"r"))][1:]
 
 def get_type(fieldname):
     """
