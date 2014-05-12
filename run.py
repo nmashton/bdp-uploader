@@ -40,6 +40,9 @@ def upload_csv():
         try:
             validate_csv(filepath,type_choice,deep)
         except Exception as e:
+            # Remove the csv file if it didn't validate
+            os.remove(filepath)
+            # Render the error
             return render_template("upload_error.html", errors=str(e)), 400
 
         name = os.path.splitext(filename)[0]
