@@ -24,7 +24,7 @@ def handle_csv(filename, type, deep):
     except Exception as e:
         return render_template("upload_error.html", errors=str(e))
 
-    name = filename.rsplit(".",1)[0]
+    name = os.path.splitext(filename)[0]
     type_split = type.rsplit("-",1)
 
     return render_template("csv.html",
