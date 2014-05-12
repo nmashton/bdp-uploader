@@ -6,4 +6,5 @@ def allowed_file(filename):
     See if the file extension is allowed by looking up in the app
     configured extensions.
     """
-    return os.path.splitext(filename)[1] in app.config["EXTENSIONS"]
+    extension = os.path.splitext(filename)[1].lstrip('.')
+    return extension in app.config["EXTENSIONS"]

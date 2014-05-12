@@ -11,29 +11,6 @@ import zipfile
 import os
 
 
-def handle_csv(filename, type, deep):
-    """
-    Check the CSV and return the metadata form.
-
-    Takes a filename, a joined-up type (e.g. 'aggregated-expenditure'),
-    and a boolean indicating whether or not deep validation is to be done.
-    """
-    f = os.path.join(app.config["UPLOADS"], filename)
-    try:
-        validate_csv(f,type,deep)
-    except Exception as e:
-        return render_template("upload_error.html", errors=str(e))
-
-    name = os.path.splitext(filename)[0]
-    type_split = type.rsplit("-",1)
-
-    return render_template("csv.html",
-                           filename=filename,
-                           name=name,
-                           granularity=type_split[0],
-                           type=type_split[1],
-                           currencies=currencies)
-
 ## Routes.
 @app.route("/")
 def index():
@@ -49,14 +26,31 @@ def upload_csv():
     """
     if request.method == "POST":
         file = request.files["csv"]
+        if not (file and allowed_file(file.filename)):
+            return redirect('/')
 
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOADS'], filename)
+        file.save(filepath)
+
+        type_choice = request.form.get("type")
         deep = (request.form.get("deep") == "deep")
 
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config["UPLOADS"], filename))
-            return handle_csv(filename=filename, type=request.form["type"], deep=deep)
-    return redirect("/")
+        try:
+            validate_csv(filepath,type_choice,deep)
+        except Exception as e:
+            return render_template("upload_error.html", errors=str(e))
+
+        name = os.path.splitext(filename)[0]
+        (granularity, budget_type) = type_choice.rsplit("-",1)
+
+        return render_template("csv.html",
+                               filename=filename,
+                               name=name,
+                               granularity=granularity,
+                               type=budget_type,
+                               currencies=currencies)
+
 
 @app.route("/metadata", methods=["POST"])
 def create_metadata():
