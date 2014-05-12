@@ -17,7 +17,7 @@ def index():
     return render_template("index.html")
 
 @app.errorhandler(400)
-@app.route("/csv", methods=["GET", "POST"])
+@app.route("/csv", methods=["POST"])
 def upload_csv():
     """
     Saves an uploaded CSV to disk and serves up its metadata editor.
@@ -70,7 +70,7 @@ def create_metadata():
 
     return render_template("metadata.html", name=fn)
 
-@app.route("/bdp/<package>", methods=["GET"])
+@app.route("/bdp/<package>")
 def generate_package(package):
     """
     Serves up the download link for the complete data package.
