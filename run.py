@@ -50,10 +50,7 @@ def upload_csv():
     if request.method == "POST":
         file = request.files["csv"]
 
-        if request.form.get("deep") == "deep":
-            deep = True
-        else:
-            deep = False
+        deep = (request.form.get("deep") == "deep")
 
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
