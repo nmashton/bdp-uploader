@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from app.bdp import app
 import csvvalidator as cv
 import datetime, time
 import re
@@ -11,13 +12,12 @@ import os.path
 
 # Create a path to the csv data file with all the currencies
 # The file is placed in the 'data' directory
-currency_data_file = os.path.join(os.path.dirname(__file__),
-                                  'data', 'currencies.csv')
+currency_file = os.path.join(app.config['DATA'], 'currencies.csv')
 
 # Extract a list of currencies from the currency data file into tuples
 # Skip the first tuple since that's the header row
 currencies = [(code, name) for (code,name) in 
-              csv.reader(open(currency_data_file, 'r'))][1:]
+              csv.reader(open(currency_file, 'r'))][1:]
 
 def get_type(fieldname):
     """
