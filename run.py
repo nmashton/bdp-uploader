@@ -16,6 +16,7 @@ import os
 def index():
     return render_template("index.html")
 
+@app.errorhandler(400)
 @app.route("/csv", methods=["GET", "POST"])
 def upload_csv():
     """
@@ -39,7 +40,7 @@ def upload_csv():
         try:
             validate_csv(filepath,type_choice,deep)
         except Exception as e:
-            return render_template("upload_error.html", errors=str(e))
+            return render_template("upload_error.html", errors=str(e)), 400
 
         name = os.path.splitext(filename)[0]
         (granularity, budget_type) = type_choice.rsplit("-",1)
