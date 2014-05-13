@@ -90,6 +90,18 @@ def generate_package(package):
 
     return send_from_directory(app.config["ZIPS"], safe_p + ".zip")
 
+@app.route('/budget-data-package')
+def specification_page():
+    return render_template("content/specification.html")
+
+@app.route('/standardized-data')
+def standardized_data_page():
+    return render_template("content/standardized-data.html")
+
+@app.route('/howto')
+def howto_page():
+    return render_template("content/howto.html")
+
 ## Run the app.
 if __name__ == '__main__':
     app.run()

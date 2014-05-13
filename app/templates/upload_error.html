@@ -2,14 +2,36 @@
 
 {% block title %}Invalid data{% endblock%}
 
+{% block jumbotron %}
+<h2>Oh no! The CSV file is invalid</h2>
+
+<p class="text-danger"><strong>Your data is invalid.</strong></p>
+<p>The following errors were returned:</p>
+<p class="bg-danger">{{ errors }}</p>
+<p>Need help? Read up on <a href="{{ url_for('specification_page') }}">how the CSV file should look</a>.</p>
+{% endblock %}
+
 {% block content %}
 <div class="row">
-  <div class="col-md-6">
-    <h1>Invalid data</h1>
+  <div class="col-md-4 step active">
+    <div class="counter">1</div>
     
-    <p class="text-danger"><strong>Your data is invalid.</strong></p>
-    <p>The following errors were returned:</p>
-    <p class="bg-danger">{{ errors }}</p>
+    <h2>Upload</h2>
+    <p class="description">Give us your spreadsheet as a CSV file.</p>
+
+    {% include "_csv_upload_form.html" %}
+  </div>
+  <div class="col-md-4 step text-muted">
+    <div class="counter">2</div>
+    <h2>Describe</h2>
+    <p class="description">Describe your dataset for us</p>
+  </div>
+  <div class="col-md-4 step text-muted">
+    <div class="counter">3</div>
+    <h2>Download</h2>
+    <p class="description">
+      Download your budget data package and start using it
+    </p>
   </div>
 </div>
 {% endblock %}

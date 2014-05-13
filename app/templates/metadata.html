@@ -2,10 +2,40 @@
 
 {% block title %}Get your package{% endblock %}
 
+{% block jumbotron %}
+<h2>Congratulations! You've built a budget data package!</h2>
+That was easy. You've just created a standardized budget data package which
+you can <a href="/bdp/{{name}}">download it</a> and start distributing!
+{% endblock %}
+
 {% block content %}
+<div class="row">
+  <div class="col-md-4 step text-muted">
+    <div class="counter">1</div>
 
-<h1>Get your package</h1>
+    <h2>Upload</h2>
+    <p class="description">You have already uploaded your CSV file.</p>
+    <p class="description"><strong>{{filename}}</strong></p>
+  </div>
+  <div class="col-md-4 step text-muted">
+    <div class="counter">2</div>
 
-<a href="/bdp/{{name}}">Download the package</a>
+    <h2>Describe</h2>
+    <p class="description">You have already described your dataset.</p>
+  </div>
+  <div class="col-md-4 step active">
+    <div class="counter">3</div>
+
+    <h2>Download</h2>
+
+    <p>We have compiled your budget data package into a zipfile.</p>
+    <p>
+      <a href="/bdp/{{name}}">Download your package</a> and start distributing
+      standardized budget data.
+    </p>
+    <p class="text-warning">
+      If you want to put it on a website you need to modify it accordingly.
+      <a href="{{ url_for('howto_page') }}#resource-update">Read our howto</a> for more information about that.
+    </p>
 
 {% endblock %}

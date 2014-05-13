@@ -1,3 +1,71 @@
 body {
-  padding-top: 50px;
+  margin-bottom: 20px;
+}
+
+header {
+  margin: 20px 0;
+}
+
+header #header-brand {
+  display: inline-block;
+  width: 48%;
+}
+
+header #header-nav {
+  display: inline-block;
+  width: 48%;
+  text-align: right;
+}
+
+header a, header a:hover, header a:focus {
+  color: #7ab800;
+  text-decoration: none;
+}
+
+header h1 {
+  margin: 0;
+  padding: 17px 0 17px 60px;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1em;
+  background: transparent url(../img/okf-logo.png) left center no-repeat;
+  background-size: auto 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.23em;
+}
+
+header #header-nav ul li {
+  display: inline;
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+div.jumbotron {
+  background: none;
+}
+
+div.step .counter {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+    padding: 10px 0 10px 4px;
+    background: transparent url(../img/hollow-ok-inactive.png) center center no-repeat;
+    text-align: center;
+    font-size: 22px;
+}
+
+div.active.step .counter {
+    background: transparent url(../img/hollow-ok-active.png) center center no-repeat;
+}
+
+div.active.step .counter {
+    color: #7ab800;
+}
+
+div.step h2, div.step .description {
+    text-align: center;
+}
+
+p.bg-danger {
+    padding: 4px;
 }
