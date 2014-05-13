@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Budget Data Packager - {% block title %}Convert your budget spreadsheet{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- BDP webapp's main CSS -->
+    <link href="/static/css/app.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <div class="row">
+          <div id="header-brand">
+            <a href="/">
+              <h1>Open Knowledge <small>Budget Data Packager</small></h1>
+            </a>
+          </div>
+          <nav id="header-nav" role="navigation" class="hidden-xs">
+            <ul id="nav-secondary" class="nav-simple">
+              <li><a href="{{ url_for('standardized_data_page') }}">Why?</a></li>
+              <li><a href="{{ url_for('specification_page') }}">What?</a></li>
+              <li><a href="{{ url_for('howto_page') }}">How?</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row">
+        <div class="jumbotron">
+          <div class="row">
+            <div class="col-md-5 hidden-xs">
+              <img src="/static/img/spreadsheet.png" class="img-responsive" alt="Convert your spreadsheet to a budget data package">
+            </div>
+            <div class="col-md-7 col-xs-12">
+              {% block jumbotron %}
+              <h2>Do you have a budget spreadsheet?</h2>
+              <p>We'll help you <a href="{{ url_for('standardized_data_page') }}">convert it</a> to <a href="{{ url_for('specification_page') }}">the budget data package specification</a>.</p>
+              {% endblock %}
+            </div>
+          </div>
+        </div> <!-- jumbotron -->
+      </div>
+      {% block content %}
+      {% endblock %}
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

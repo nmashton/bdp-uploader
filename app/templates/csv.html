@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Describe your dataset{% endblock %}
+
+{% block jumbotron %}
+<h2>Thanks for your CSV file. No errors found!</h2>
+<p>
+  Congratulations on a well formed CSV file.
+  Now you just need to give us some extra information to describe the dataset.
+</p>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4 step text-muted">
+    <div class="counter">1</div>
+
+    <h2>Upload</h2>
+    <p class="description">You have already uploaded your CSV file.</p>
+    <p class="description"><strong>{{filename}}</strong></p>
+  </div>
+  <div class="col-md-4 step active">
+    <div class="counter">2</div>
+
+    <h2>Describe</h2>
+    <p class="description">Describe your dataset for us</p>
+
+    <form action="../metadata" method="post" role="form">
+      <input type="hidden" name="granularity" value="{{granularity}}">
+      <input type="hidden" name="type" value="{{type}}">
+      <input type="hidden" name="filename" value="{{filename}}">
+      
+      <div class="form-group">
+        <label for="name_resource">Dataset name</label>
+        <input type="text" name="name_resource" class="form-control" value="{{name}}">
+      </div>
+      <div class="form-group">
+        <label for="currency">Currency</label>
+        <select class="form-control" name="currency">
+          {% for (code, name) in currencies %}
+          <option value="{{ code }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="dateLastUpdated">Date last updated</label>
+            <input type="date" class="form-control" name="dateLastUpdated">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="datePublished">Date published</label>
+            <input type="date" class="form-control" name="datePublished">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="fiscalYear">Fiscal year</label>
+            <input type="text" class="form-control" name="fiscalYear">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" name="status">
+              <option value="proposed">Proposed</option>
+              <option value="approved">Approved</option>
+              <option value="adjusted">Adjusted</option>
+              <option value="executed">Executed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="form-group">
+        <label for="name_package">Data package name</label>
+        <input type="text" class="form-control" name="name_package">
+      </div>
+      
+      <input type="submit" class="btn btn-default" value="Submit">
+    </form>
+  </div>
+  <div class="col-md-4 step text-muted">
+    <div class="counter">3</div>
+    <h2>Download</h2>
+    <p class="description">
+      Download your budget data package and start using it
+    </p>
+  </div>
+</div>
+{% endblock %}
