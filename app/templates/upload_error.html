@@ -2,6 +2,10 @@
 
 {% block title %}Invalid data{% endblock%}
 
+{% block jumbotron_icon -%}
+{{ url_for('static', filename='img/invalid-spreadsheet.png') }}
+{%- endblock %}
+
 {% block jumbotron %}
 <h2>Oh no! The CSV file is invalid</h2>
 

@@ -2,6 +2,10 @@
 
 {% block title %}Get your package{% endblock %}
 
+{% block jumbotron_icon -%}
+{{ url_for('static', filename='img/gift-spreadsheet.png') }}
+{%- endblock %}
+
 {% block jumbotron %}
 <h2>Congratulations! You've built a budget data package!</h2>
 That was easy. You've just created a standardized budget data package which

@@ -2,6 +2,9 @@
 
 {% block title %}Describe your dataset{% endblock %}
 
+{% block jumbotron_icon -%}
+{{ url_for('static', filename='img/green-spreadsheet.png') }}
+{%- endblock %}
 {% block jumbotron %}
 <h2>Thanks for your CSV file. No errors found!</h2>
 <p>
