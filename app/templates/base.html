@@ -46,7 +46,7 @@
         <div class="jumbotron">
           <div class="row">
             <div class="col-md-5 hidden-xs">
-              <img src="/static/img/spreadsheet.png" class="img-responsive" alt="Convert your spreadsheet to a budget data package">
+              <img src="{% block jumbotron_icon %}{{ url_for('static', filename='img/spreadsheet.png') }}{% endblock %}" class="img-responsive" alt="Convert your spreadsheet to a budget data package">
             </div>
             <div class="col-md-7 col-xs-12">
               {% block jumbotron %}

@@ -1,11 +1,23 @@
 from app.bdp import app
+from utils.s3 import generate_key
 from utils.csv import get_fields
+from urlparse import urljoin
 import json
 import os
 
+def resource_path(filename):
+    if app.config['S3_BUCKET'] and app.config['S3_HTTP_URL']:
+        key = generate_key(filename, prefix=app.config['S3_CSV_PREFIX'])
+        return urljoin(app.config['S3_HTTP_URL'], key)
+    else:
+        package = os.path.join(app.config['METADATA'], filename)
+        filepath = os.path.join(app.config['UPLOADS'], filename)
+        return os.path.relpath(filepath, package)
+    
+
 def create_json(form):
     """
-    Turns form data submitted at /metdata into a JSON object.
+    Turns data submitted at /metadata into a JSON object.
 
     (To be written to disk elsewhere.)
     """
@@ -14,7 +26,7 @@ def create_json(form):
         "datapackage_version": "1.0-beta.7",
         "resources": [
             {
-            "path": "./" + form["filename"],
+            "path": resource_path(form["filename"]),
             "name": form["name_resource"],
 
             "currency": form["currency"],
@@ -28,8 +40,8 @@ def create_json(form):
 
             "schema": {
                 "primaryKey": "id",
-                "fields": get_fields(os.path.join(app.config["UPLOADS"], form["filename"]))
-            }
+                "fields": get_fields(form.getlist('headers'))
+                }
             }
         ]
     }

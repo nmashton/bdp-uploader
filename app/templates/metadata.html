@@ -2,10 +2,14 @@
 
 {% block title %}Get your package{% endblock %}
 
+{% block jumbotron_icon -%}
+{{ url_for('static', filename='img/gift-spreadsheet.png') }}
+{%- endblock %}
+
 {% block jumbotron %}
 <h2>Congratulations! You've built a budget data package!</h2>
 That was easy. You've just created a standardized budget data package which
-you can <a href="/bdp/{{name}}">download it</a> and start distributing!
+you can <a href="{{ package_url }}">download it</a> and start distributing!
 {% endblock %}
 
 {% block content %}
@@ -30,7 +34,7 @@ you can <a href="/bdp/{{name}}">download it</a> and start distributing!
 
     <p>We have compiled your budget data package into a zipfile.</p>
     <p>
-      <a href="/bdp/{{name}}">Download your package</a> and start distributing
+      <a href="{{ package_url }}">Download your package</a> and start distributing
       standardized budget data.
     </p>
     <p class="text-warning">

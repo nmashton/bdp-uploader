@@ -2,10 +2,12 @@ from app.bdp import app
 from flask import (render_template, request, redirect, url_for,
                    send_from_directory)
 from werkzeug.utils import secure_filename
+from urlparse import urljoin
 
-from utils.csv import validate_csv, get_fields, currencies
-from utils.files import allowed_file
+from utils.csv import BudgetCSV, get_fields, currencies
+from utils.files import allowed_file, slugify
 from utils.metadata import create_json
+from utils import s3
 
 import zipfile
 import os
@@ -30,26 +32,32 @@ def upload_csv():
         if not (file and allowed_file(file.filename)):
             return redirect('/')
 
-        filename = secure_filename(file.filename)
-        filepath = os.path.join(app.config['UPLOADS'], filename)
-        file.save(filepath)
-
+        budget = BudgetCSV(file)
         type_choice = request.form.get("type")
         deep = (request.form.get("deep") == "deep")
 
         try:
-            validate_csv(filepath,type_choice,deep)
+            budget.validate(type_choice, deep)
         except Exception as e:
-            # Remove the csv file if it didn't validate
-            os.remove(filepath)
             # Render the error
             return render_template("upload_error.html", errors=str(e)), 400
 
+        filename = secure_filename(file.filename)
         name = os.path.splitext(filename)[0]
+
+        if app.config['S3_BUCKET'] is not None:
+            key = s3.generate_key(filename,
+                                  prefix=app.config['S3_CSV_PREFIX'])
+            s3.put_file(key, budget.file, content_type='application/json')
+        else:
+            filepath = os.path.join(app.config['UPLOADS'], filename)
+            budget.file.save(filepath)
+
         (granularity, budget_type) = type_choice.rsplit("-",1)
 
         return render_template("csv.html",
                                filename=filename,
+                               headers=budget.headers,
                                name=name,
                                granularity=granularity,
                                type=budget_type,
@@ -66,12 +74,25 @@ def create_metadata():
     as a few hidden fields generated when the CSV was uploaded.
     """
 
-    fn = secure_filename(request.form["filename"].rsplit(".",1)[0])
-    f = open(os.path.join(app.config["METADATA"], fn + ".json"),"w")
-    f.write(create_json(request.form))
-    f.close()
+    package = slugify(secure_filename(request.form["name_package"]))
+    metadata = create_json(request.form)
 
-    return render_template("metadata.html", name=fn)
+    if app.config['S3_BUCKET'] is not None:
+        keypath = s3.generate_key(package, prefix=app.config['S3_BDP_PREFIX'])
+        key= '/'.join([keypath, 'datapackage.json'])
+        s3.put_content(key, metadata, content_type='application/csv')
+        package_url = urljoin(app.config['S3_HTTP_URL'], key)
+    else:
+        packagedir = os.path.join(app.config['METADATA'], package)
+        if not os.path.isdir(packagedir):
+            os.mkdir(packagedir)
+
+        jsonfile = open(os.path.join(packagedir, "datapackage.json"), "w")
+        jsonfile.write(metadata)
+        jsonfile.close()
+        package_url = url_for('generate_package')
+
+    return render_template("metadata.html", package_url=package_url)
 
 @app.route("/bdp/<package>")
 def generate_package(package):
@@ -81,14 +102,9 @@ def generate_package(package):
     For this to work, there must be an uploaded CSV and metadata
     descriptor with names corresponding to `package`.
     """
-    safe_p = secure_filename(package)
-
-    f = zipfile.ZipFile(os.path.join(app.config["ZIPS"], safe_p + ".zip"), "w")
-    f.write(os.path.join(app.config["UPLOADS"], safe_p + ".csv"), safe_p + ".csv")
-    f.write(os.path.join(app.config["METADATA"], safe_p + ".json"), "datapackage.json")
-    f.close()
-
-    return send_from_directory(app.config["ZIPS"], safe_p + ".zip")
+    packagename = slugify(secure_filename(package))
+    packagedir = os.path.join(app.config['METADATA'], packagename)
+    send_from_directory(packagedir, 'datapackage.json')
 
 @app.route('/budget-data-package')
 def specification_page():
