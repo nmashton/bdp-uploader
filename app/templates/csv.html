@@ -74,6 +74,9 @@
             </select>
           </div>
         </div>
+        {% for header in headers %}
+        <input type="hidden" name="header" value="{{ header }}">
+        {% endfor %}
       </div>
       <hr>
       <div class="form-group">

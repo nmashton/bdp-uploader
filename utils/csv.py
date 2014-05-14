@@ -19,6 +19,60 @@ currency_file = os.path.join(app.config['DATA'], 'currencies.csv')
 currencies = [(code, name) for (code,name) in 
               csv.reader(open(currency_file, 'r'))][1:]
 
+class BudgetCSV(object):
+    """
+    Budget data is stored in CSV files. This class wraps a CSV file to limit
+    access to the file by providing headers and validators.
+    """
+
+    def __init__(self, csvfile, *args, **kwargs):
+        self.csvfile = csvfile
+        self.headers = self._get_headers()
+
+    @property
+    def file(self):
+        # Reset file and return the handle
+        self.csvfile.seek(0)
+        return self.csvfile
+
+    def _get_headers(self):
+        """
+        Get CSV file headers
+        """
+
+        # Headers are alway the first row of a CSV file
+        reader = csv.reader(self.file)
+        return reader.next()
+
+    def validate(self, type, deep=True):
+        """
+        Validates the CSV on the basis of supplied type information.
+        """
+
+        field_requirements = {
+            "aggregated-expenditure": ["amount", "id", "admin", "cofog"],
+            "transactional-expenditure": ["amount", "id", "admin", 
+                                          "date", "supplier"],
+            "aggregated-revenue": ["amount", "id", "gfsmRevenue"],
+            "transactional-revenue": ["amount", "id", "gfsmRevenue"]
+            }
+
+        for header in field_requirements[type]:
+            if header not in self.headers:
+                raise AssertionError("CSV headers incorrect for type " + type)
+
+        if deep:
+            validator = cv.CSVValidator(self.headers)
+            validator.add_header_check()
+            validator.add_record_length_check()
+            for header in self.headers:
+                if header in field_validators:
+                    validator.add_value_check(header,
+                                              field_validators[header])
+
+            validator.validate(csv.reader(self.file))
+
+
 def get_type(fieldname):
     """
     Returns the right type for a field name.
@@ -27,53 +81,15 @@ def get_type(fieldname):
         return field_types[fieldname]
     return "string"
 
-def get_fields(filename):
+
+def get_fields(headers):
     """
     Generates the `fields` array for the resource metadata.
 
     Takes a filename.
     """
-    f = open(filename,"r")
-    r = csv.reader(f)
-    hs = r.next()
-    return [{"name": h, "type": get_type(h)} for h in hs]
+    return [{"name": header, "type": get_type(header)} for header in headers]
 
-def validate_csv(filename,type,deep=True):
-    """
-    Validates a CSV on the basis of supplied type information.
-
-    Takes a filename and 
-    """
-
-    field_requirements = {
-        "aggregated-expenditure": ["amount", "id", "admin", "cofog"],
-        "transactional-expenditure": ["amount", "id", "admin", "date", "supplier"],
-        "aggregated-revenue": ["amount", "id", "gfsmRevenue"],
-        "transactional-revenue": ["amount", "id", "gfsmRevenue"]
-    }
-
-    f = open(filename,"r")
-    r = csv.reader(f)
-
-    hs = r.next()
-    valid = True
-    for h in field_requirements[type]:
-        valid = valid and h in hs
-    if not valid:
-        raise AssertionError("CSV headers incorrect for type " + type)
-    f.seek(0)
-
-    if deep:
-        v = cv.CSVValidator(hs)
-        v.add_header_check()    
-        v.add_record_length_check()
-        for h in hs:
-            if h in field_validators:
-                v.add_value_check(h, field_validators[h])
-
-        v.validate(r)
-
-    return True
 
 def cofogValidator(cofog):
     """
