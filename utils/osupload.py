@@ -62,6 +62,7 @@ class BDP(object):
         Does what's necessary to get the CSV ready for OS upload.
         """
         fields = self.csv._get_headers()
+        m = self.metadata
         if cofog_pred(fields):
             self.csv.append_columns(
                 ["cofog1","cofog2","cofog3"],
@@ -81,6 +82,8 @@ class BDP(object):
                  "gfsmRevenue3",
                  "gfsmRevenue4"],
                  split_gfsm_revenue)
+        if "date" not in fields:
+            self.csv.append_columns(["date"],append_date(m["resources"][0]["fiscalYear"]))
 
     def make_model(self):
         """
@@ -213,3 +216,10 @@ def split_gfsm(row,type):
 
 split_gfsm_expenditure = lambda r: split_gfsm(r, "Expenditure")
 split_gfsm_revenue = lambda r: split_gfsm(r, "Revenue")
+
+def append_date(date):
+    """
+    Returns a parameterized row-modification function that appends a 
+    constant year 
+    """
+    return lambda _: {"date":date}
